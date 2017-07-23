@@ -4,10 +4,14 @@
 
 class TextureBlur
 {
+	static cocos2d::GLProgramState* _blurHor;
+	static cocos2d::GLProgramState* _blurVer;
+
 public:
-    static void create(cocos2d::Texture2D* target, const int radius, const std::string& fileName, std::function<void()> callback, const int step = 1);
+	static void initShader();
+	static cocos2d::Texture2D* create(cocos2d::Texture2D* target, const int radius, const int step = 1);
 
 private:
-    static void calculateGaussianWeights(const int points, float* weights);    
-    static cocos2d::GLProgram* getBlurShader(cocos2d::Vec2 pixelSize, cocos2d::Vec2 direction, const int radius, float* weights);
+	static cocos2d::GLProgramState* getBlurShaderHor(cocos2d::Vec2 resolution, const int radius);
+	static cocos2d::GLProgramState* getBlurShaderVer(cocos2d::Vec2 resolution, const int radius);
 };

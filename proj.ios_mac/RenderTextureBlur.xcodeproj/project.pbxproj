@@ -53,7 +53,6 @@
 		635D65001BB3025C0036FAF0 /* clouds.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FB1BB3025C0036FAF0 /* clouds.png */; };
 		635D65011BB3025C0036FAF0 /* ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FC1BB3025C0036FAF0 /* ground.png */; };
 		635D65021BB3025C0036FAF0 /* ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FC1BB3025C0036FAF0 /* ground.png */; };
-		635D65051BB3025C0036FAF0 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FE1BB3025C0036FAF0 /* sky.png */; };
 		635D65061BB3025C0036FAF0 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FE1BB3025C0036FAF0 /* sky.png */; };
 		635D65091BB302660036FAF0 /* TextureBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 635D65071BB302660036FAF0 /* TextureBlur.cpp */; };
 		635D650A1BB302660036FAF0 /* TextureBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 635D65071BB302660036FAF0 /* TextureBlur.cpp */; };
@@ -69,6 +68,7 @@
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
+		F864F0261F250A7600E1288B /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 635D64FE1BB3025C0036FAF0 /* sky.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +99,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A07A4C241783777C0073F6A7;
 			remoteInfo = "cocos2dx iOS";
+		};
+		F864F0241F25081400E1288B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 507B40FD1C31BDD30067B53E;
+			remoteInfo = "libcocos2d tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -238,6 +245,7 @@
 			children = (
 				1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */,
 				1AC6FB07180E9839004C840B /* libcocos2d iOS.a */,
+				F864F0251F25081400E1288B /* libcocos2d tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -401,6 +409,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = L3UA46DS39;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RenderTextureBlur" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -443,6 +456,13 @@
 			remoteRef = 1AC6FB06180E9839004C840B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		F864F0251F25081400E1288B /* libcocos2d tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d tvOS.a";
+			remoteRef = F864F0241F25081400E1288B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -459,8 +479,8 @@
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
+				F864F0261F250A7600E1288B /* sky.png in Resources */,
 				635D65101BB3CC0B0036FAF0 /* Shaders in Resources */,
-				635D65051BB3025C0036FAF0 /* sky.png in Resources */,
 				635D64FF1BB3025C0036FAF0 /* clouds.png in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
@@ -536,6 +556,8 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEVELOPMENT_TEAM = L3UA46DS39;
+				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -553,13 +575,14 @@
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
 				SDKROOT = iphoneos;
+				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_IOS_BEGIN) $(_COCOS_HEADER_IOS_END)";
 				VALID_ARCHS = "arm64 armv7";
@@ -572,6 +595,8 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEVELOPMENT_TEAM = L3UA46DS39;
+				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
@@ -587,13 +612,14 @@
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
 				SDKROOT = iphoneos;
+				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_IOS_BEGIN) $(_COCOS_HEADER_IOS_END)";
 				VALID_ARCHS = "arm64 armv7";
