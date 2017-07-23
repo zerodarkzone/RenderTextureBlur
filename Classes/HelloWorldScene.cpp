@@ -31,7 +31,7 @@ bool HelloWorld::init()
 
 	Size screenSize = Director::getInstance()->getWinSize();
 
-	float scale = 4.0f;
+	float scale = 2.0f;
 
 	auto sky = Sprite::create("sky.png");
 	sky->retain();
@@ -52,7 +52,7 @@ bool HelloWorld::init()
 	ground->setAnchorPoint(Point(0.0f, 0.0f));
 	ground->setPosition(0.0f, 0.0f);
 
-	auto rt = RenderTexture::create(screenSize.width / scale, screenSize.height / scale, Texture2D::PixelFormat::RGBA8888);
+	auto rt = RenderTexture::create(screenSize.width / scale, screenSize.height / scale, Texture2D::PixelFormat::RGB565);
 	rt->retain();
 	rt->begin();
 	sky->visit();
@@ -60,8 +60,10 @@ bool HelloWorld::init()
 	clouds->visit();
 	rt->end();
 
-	TextureBlur::initShader();
-	auto texture = TextureBlur::create(rt->getSprite()->getTexture(), 2);
+    textureBlur.initShader(screenSize);
+    
+	
+	auto texture = textureBlur.create(rt->getSprite()->getTexture(), 2);
 	auto sprite = Sprite::createWithTexture(texture);
 	sprite->setAnchorPoint(Point(0.0f, 0.0f));
 	sprite->setScale(scale);

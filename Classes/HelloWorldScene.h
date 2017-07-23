@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "TextureBlur.h"
 
 namespace cocos2d
 {
@@ -22,6 +23,9 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
+    RenderTexture *render;
+    TextureBlur textureBlur;
+    
 private:
 	void completionCallback(const std::string& name);
 };

@@ -9,7 +9,7 @@ static const int maxRadius = 64;
 GLProgramState* TextureBlur::_blurHor = nullptr;
 GLProgramState* TextureBlur::_blurVer = nullptr;
 
-cocos2d::GLProgramState * TextureBlur::getBlurShaderHor(cocos2d::Vec2 resolution, const int radius)
+GLProgramState * TextureBlur::getBlurShaderHor(Vec2 resolution, const int radius)
 {
 	_blurHor->setUniformVec2("uResolution", resolution);
 	_blurHor->setUniformFloat("dirx", 1.0);
@@ -18,7 +18,7 @@ cocos2d::GLProgramState * TextureBlur::getBlurShaderHor(cocos2d::Vec2 resolution
 	return _blurHor;
 }
 
-cocos2d::GLProgramState * TextureBlur::getBlurShaderVer(cocos2d::Vec2 resolution, const int radius)
+GLProgramState * TextureBlur::getBlurShaderVer(Vec2 resolution, const int radius)
 {
 	_blurVer->setUniformVec2("uResolution", resolution);
 	_blurVer->setUniformFloat("dirx", 0.0);
@@ -27,16 +27,25 @@ cocos2d::GLProgramState * TextureBlur::getBlurShaderVer(cocos2d::Vec2 resolution
 	return _blurVer;
 }
 
-void TextureBlur::initShader()
+void TextureBlur::initShader(Size tSize)
 {
 	std::string blurShaderPath = FileUtils::getInstance()->fullPathForFilename("Shaders/TextureBlur.fsh");
-	const GLchar* blur_frag = String::createWithContentsOfFile(blurShaderPath.c_str())->getCString();
+	const GLchar* blur_frag = __String::createWithContentsOfFile(blurShaderPath.c_str())->getCString();
 
 	auto _blurH = GLProgram::createWithByteArrays(ccPositionTextureColor_vert, blur_frag);
 	auto _blurV = GLProgram::createWithByteArrays(ccPositionTextureColor_vert, blur_frag);
 
 	_blurHor = GLProgramState::getOrCreateWithGLProgram(_blurH);
 	_blurVer = GLProgramState::getOrCreateWithGLProgram(_blurV);
+    
+    _textureSize = tSize;
+
+    rtX = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
+    rtX->retain();
+    
+    rtY = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
+    rtY->retain();
+
 }
 
 Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int step)
@@ -50,11 +59,15 @@ Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int st
 	auto start = std::chrono::high_resolution_clock::now();
 
 	Size textureSize = target->getContentSize();
+    
+    CCLOG("%f %f",textureSize.width,textureSize.height);
+    CCLOG("%f %f",_textureSize.width,_textureSize.height);
+    
 	Vec2 pixelSize = Vec2(float(step) / textureSize.width, float(step) / textureSize.height);
 	int radiusWithStep = radius / step;
 
 
-	Sprite* stepX = CCSprite::createWithTexture(target);
+	Sprite* stepX = Sprite::createWithTexture(target);
 	stepX->retain();
 	stepX->setPosition(Point(0.5f*textureSize.width, 0.5f*textureSize.height));
 	stepX->setFlippedY(true);
@@ -62,32 +75,27 @@ Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int st
 	GLProgramState* blurX = getBlurShaderHor({ textureSize.width , textureSize.height }, radiusWithStep);
 	stepX->setGLProgramState(blurX);
 
-	RenderTexture* rtX = RenderTexture::create(textureSize.width, textureSize.height);
-	rtX->retain();
+
 	rtX->begin();
 	stepX->visit();
 	rtX->end();
 
-	Sprite* stepY = CCSprite::createWithTexture(rtX->getSprite()->getTexture());
+	Sprite* stepY = Sprite::createWithTexture(rtX->getSprite()->getTexture());
 	stepY->retain();
 	stepY->setAnchorPoint(Point(0.0f, 0.0f));
 	stepY->setPosition(Point(0.0f, 0.0f));
 	stepY->setFlippedY(true);
 
-	Size screenSize = Director::getInstance()->getWinSize();
-
 	GLProgramState* blurY = getBlurShaderVer({ textureSize.width , textureSize.height }, radiusWithStep);
 	stepY->setGLProgramState(blurY);
 
-	RenderTexture* rtY = RenderTexture::create(textureSize.width, textureSize.height);
-	rtY->retain();
 	rtY->begin();
 	stepY->visit();
 	rtY->end();
 
 	auto end = std::chrono::high_resolution_clock::now();
 	auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	CCLOG("Measured time: %d ms", (int)dur.count());
+	CCLOG("Measured time: %lld ms", dur.count());
 
 	return rtY->getSprite()->getTexture();
 }

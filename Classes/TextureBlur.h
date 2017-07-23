@@ -2,16 +2,23 @@
 
 #include "cocos2d.h"
 
+USING_NS_CC;
+
 class TextureBlur
 {
-	static cocos2d::GLProgramState* _blurHor;
-	static cocos2d::GLProgramState* _blurVer;
+	static GLProgramState* _blurHor;
+	static GLProgramState* _blurVer;
 
 public:
-	static void initShader();
-	static cocos2d::Texture2D* create(cocos2d::Texture2D* target, const int radius, const int step = 1);
-
+	void initShader(cocos2d::Size tSize);
+	Texture2D* create(cocos2d::Texture2D* target, const int radius, const int step = 1);
+    
 private:
-	static cocos2d::GLProgramState* getBlurShaderHor(cocos2d::Vec2 resolution, const int radius);
-	static cocos2d::GLProgramState* getBlurShaderVer(cocos2d::Vec2 resolution, const int radius);
+    RenderTexture* rtX;
+    RenderTexture* rtY;
+
+	Size _textureSize;
+    
+    static GLProgramState* getBlurShaderHor(Vec2 resolution, const int radius);
+	static GLProgramState* getBlurShaderVer(Vec2 resolution, const int radius);
 };
