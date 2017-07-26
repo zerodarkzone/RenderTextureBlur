@@ -31,7 +31,7 @@ bool HelloWorld::init()
 
 	Size screenSize = Director::getInstance()->getWinSize();
 
-	float scale = 8.0f;
+	float scale = 2.0f;
 
 	/*auto sky = Sprite::create("sky.png");
 	sky->retain();
@@ -65,7 +65,7 @@ bool HelloWorld::init()
 	rt->end();
 
 	TextureBlur::initShader(screenSize / scale);
-	auto texture = TextureBlur::create(rt->getSprite()->getTexture(), 1.1f, 1);
+	auto texture = TextureBlur::create(rt->getSprite()->getTexture(), 32);
 	auto sprite = Sprite::createWithTexture(texture);
 	sprite->getTexture()->setAntiAliasTexParameters();
 	sprite->setAnchorPoint(Point(0.0f, 0.0f));
