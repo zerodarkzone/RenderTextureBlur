@@ -92,7 +92,7 @@ Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int st
 	GLProgramState* blurX = getBlurShaderHor(pixelSize, radiusWithStep, weights);
 	stepX->setGLProgramState(blurX);
 
-	rtX->begin();
+	rtX->beginWithClear(0.0f, 0.0f, 0.0f, 0.0f);
 	stepX->visit();
 	rtX->end();
 
@@ -107,7 +107,7 @@ Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int st
 	GLProgramState* blurY = getBlurShaderVer(pixelSize, radiusWithStep, weights);
 	stepY->setGLProgramState(blurY);
 
-	rtY->begin();
+	rtY->beginWithClear(0.0f, 0.0f, 0.0f, 0.0f);
 	stepY->visit();
 	rtY->end();
 
