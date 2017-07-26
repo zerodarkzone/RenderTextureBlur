@@ -8,8 +8,11 @@ static const int maxRadius = 64;
 
 GLProgramState* TextureBlur::_blurHor = nullptr;
 GLProgramState* TextureBlur::_blurVer = nullptr;
+RenderTexture* TextureBlur::rtX = nullptr;
+RenderTexture* TextureBlur::rtY = nullptr;
+Size TextureBlur::_textureSize;
 
-GLProgramState * TextureBlur::getBlurShaderHor(Vec2 resolution, const int radius)
+GLProgramState * TextureBlur::getBlurShaderHor(Vec2 resolution, const float radius)
 {
 	_blurHor->setUniformVec2("uResolution", resolution);
 	_blurHor->setUniformFloat("dirx", 1.0);
@@ -18,7 +21,7 @@ GLProgramState * TextureBlur::getBlurShaderHor(Vec2 resolution, const int radius
 	return _blurHor;
 }
 
-GLProgramState * TextureBlur::getBlurShaderVer(Vec2 resolution, const int radius)
+GLProgramState * TextureBlur::getBlurShaderVer(Vec2 resolution, const float radius)
 {
 	_blurVer->setUniformVec2("uResolution", resolution);
 	_blurVer->setUniformFloat("dirx", 0.0);
@@ -37,18 +40,18 @@ void TextureBlur::initShader(Size tSize)
 
 	_blurHor = GLProgramState::getOrCreateWithGLProgram(_blurH);
 	_blurVer = GLProgramState::getOrCreateWithGLProgram(_blurV);
-    
-    _textureSize = tSize;
 
-    rtX = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
-    rtX->retain();
-    
-    rtY = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
-    rtY->retain();
+	_textureSize = tSize;
+
+	rtX = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
+	rtX->retain();
+
+	rtY = RenderTexture::create(_textureSize.width, _textureSize.height, Texture2D::PixelFormat::RGB565);
+	rtY->retain();
 
 }
 
-Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int step)
+Texture2D* TextureBlur::create(Texture2D* target, const float radius, const int step)
 {
 	CCASSERT(target != nullptr, "Null pointer passed as a texture to blur");
 	CCASSERT(radius <= maxRadius, "Blur radius is too big");
@@ -59,12 +62,12 @@ Texture2D* TextureBlur::create(Texture2D* target, const int radius, const int st
 	auto start = std::chrono::high_resolution_clock::now();
 
 	Size textureSize = target->getContentSize();
-    
-    CCLOG("%f %f",textureSize.width,textureSize.height);
-    CCLOG("%f %f",_textureSize.width,_textureSize.height);
-    
+
+	CCLOG("%f %f", textureSize.width, textureSize.height);
+	CCLOG("%f %f", _textureSize.width, _textureSize.height);
+
 	Vec2 pixelSize = Vec2(float(step) / textureSize.width, float(step) / textureSize.height);
-	int radiusWithStep = radius / step;
+	float radiusWithStep = radius / step;
 
 
 	Sprite* stepX = Sprite::createWithTexture(target);

@@ -31,9 +31,9 @@ bool HelloWorld::init()
 
 	Size screenSize = Director::getInstance()->getWinSize();
 
-	float scale = 2.0f;
+	float scale = 8.0f;
 
-	auto sky = Sprite::create("sky.png");
+	/*auto sky = Sprite::create("sky.png");
 	sky->retain();
 	sky->setScaleX(screenSize.width / (scale * sky->getBoundingBox().size.width));
 	sky->setScaleY(screenSize.height / (scale * sky->getBoundingBox().size.height));
@@ -50,21 +50,24 @@ bool HelloWorld::init()
 	ground->retain();
 	ground->setScale(screenSize.width / (scale * ground->getBoundingBox().size.width));
 	ground->setAnchorPoint(Point(0.0f, 0.0f));
-	ground->setPosition(0.0f, 0.0f);
+	ground->setPosition(0.0f, 0.0f);*/
+
+	auto image = Sprite::create("badland.png");
+	image->retain();
+	image->setScale(screenSize.width / (scale * image->getBoundingBox().size.width));
+	image->setAnchorPoint(Point(0.0f, 0.0f));
+	image->setPosition(0.0f, 0.0f);
 
 	auto rt = RenderTexture::create(screenSize.width / scale, screenSize.height / scale, Texture2D::PixelFormat::RGB565);
 	rt->retain();
 	rt->begin();
-	sky->visit();
-	ground->visit();
-	clouds->visit();
+	image->visit();
 	rt->end();
 
-    textureBlur.initShader(screenSize);
-    
-	
-	auto texture = textureBlur.create(rt->getSprite()->getTexture(), 2);
+	TextureBlur::initShader(screenSize / scale);
+	auto texture = TextureBlur::create(rt->getSprite()->getTexture(), 1.1f, 1);
 	auto sprite = Sprite::createWithTexture(texture);
+	sprite->getTexture()->setAntiAliasTexParameters();
 	sprite->setAnchorPoint(Point(0.0f, 0.0f));
 	sprite->setScale(scale);
 	sprite->setFlippedY(true);
